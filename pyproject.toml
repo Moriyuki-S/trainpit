@@ -1,7 +1,7 @@
 [project]
 name = "trainpit"
 version = "0.1.0"
-description = "Add your description here"
+description = "Rich CLI progress monitoring for machine learning training loops"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
