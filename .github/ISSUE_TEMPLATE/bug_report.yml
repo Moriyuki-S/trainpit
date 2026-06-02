@@ -1,0 +1,41 @@
+name: Bug report
+description: Report incorrect behavior in trainpit.
+title: "[Bug]: "
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the incorrect behavior.
+      placeholder: The train display emits terminal control sequences in non-TTY output.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Provide a minimal reproduction.
+      placeholder: |
+        1. Run ...
+        2. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: Describe what should happen instead.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include Python, operating system, terminal, and trainpit version.
+      placeholder: |
+        - Python:
+        - OS:
+        - Terminal:
+        - trainpit:
+    validations:
+      required: false

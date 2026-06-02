@@ -1,0 +1,44 @@
+name: Implementation task
+description: Track planned implementation work for trainpit.
+title: "[Task]: "
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe the implementation task and why it is needed.
+      placeholder: Implement the non-TTY renderer for structured train logs.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: List the concrete work included in this task.
+      placeholder: |
+        - Add the renderer module
+        - Cover TTY and non-TTY branching
+        - Add focused tests
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: Define how this task will be verified.
+      placeholder: |
+        - `uv run pytest` passes
+        - `uv run ruff check .` passes
+        - `uv run ruff format --check .` passes
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Link related internal docs, public docs, issues, or pull requests.
+      placeholder: |
+        - dev-docs/04_FEATURE_DESIGN.md
+        - dev-docs/05_ARCHITECTURE_DESIGN.md
+    validations:
+      required: false
