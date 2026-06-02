@@ -1,0 +1,66 @@
+name: Quality
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint, format, and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: .python-version
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8
+        with:
+          enable-cache: true
+
+      - name: Validate lockfile
+        run: uv lock --check
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --dev
+
+      - name: Check formatting
+        run: uv run ruff format --check .
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Compile Python files
+        run: uv run python -m compileall main.py src tests
+
+      - name: Build package
+        run: uv build
+
+      - name: Verify wheel installs
+        shell: bash
+        run: |
+          wheel_test_env="$(mktemp -d)"
+          python3 -m venv "$wheel_test_env"
+          "$wheel_test_env/bin/python" -m pip install dist/*.whl
+          "$wheel_test_env/bin/python" - <<'PY'
+          from importlib.metadata import metadata
+
+          import trainpit
+
+          assert trainpit.__name__ == "trainpit"
+          assert metadata("trainpit")["Name"] == "trainpit"
+          PY
