@@ -15,19 +15,10 @@ RUN apt-get update \
         pkg-config \
         sudo \
         curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && groupadd --gid "${USER_GID}" "${USERNAME}" \
-    && useradd --uid "${USER_UID}" --gid "${USER_GID}" -m "${USERNAME}" \
-    && echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} \
-    && chmod 0440 /etc/sudoers.d/${USERNAME}
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR ${WORKSPACE_DIR}
 
 ENV UV_PROJECT_ENVIRONMENT=/workspaces/.venv \
     UV_CACHE_DIR=/home/${USERNAME}/.cache/uv \
     PATH=/workspaces/.venv/bin:${PATH}
-
-RUN mkdir -p /workspaces/.venv /home/${USERNAME}/.cache/uv \
-    && chown -R ${USERNAME}:${USERNAME} /workspaces /home/${USERNAME}/.cache/uv
-
-USER ${USERNAME}
