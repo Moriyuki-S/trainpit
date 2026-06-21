@@ -20,15 +20,19 @@ For development, include the development dependency group:
 uv sync --locked --all-extras --dev
 ```
 
-## Import Check
+## API Check
 
-The public API is still being designed. For now, verify that the package imports correctly:
+Verify that the package exposes the `train` tracker API:
 
 ```python
-import trainpit
+from trainpit import train
 
-assert trainpit.__name__ == "trainpit"
+with train(total_epochs=1, total_steps=1, label="smoke-test") as progress:
+    progress.epoch(1)
+    progress.step(1, loss=0.5, metrics={"acc": 1.0}, learning_rate=0.0001)
 ```
+
+Continue with [Tutorial](tutorial.md) for a fuller example.
 
 ## Build Artifacts
 

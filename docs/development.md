@@ -49,8 +49,15 @@ uv run zensical build
 Preview it locally:
 
 ```sh
-uv run zensical serve
+uv run zensical serve --dev-addr 0.0.0.0:8010
 ```
+
+In a dev container, open the forwarded port at
+`http://localhost:8010/trainpit/`.
+
+If the browser shows `{"detail":"Not Found"}`, the request is probably reaching
+another service on the same port. Stop that service or switch `8010` to another
+free port in both the command and `.devcontainer/devcontainer.json`.
 
 ## Pull Request Checklist
 

@@ -16,7 +16,7 @@ with train(total_epochs=10, total_steps=500, label="experiment-001") as progress
 
         for step, batch in enumerate(loader, start=1):
             loss, metrics = train_step(batch)
-            progress.step(step, loss=loss, metrics=metrics, lr=0.0001)
+            progress.step(step, loss=loss, metrics=metrics, learning_rate=0.0001)
 ```
 
 ## State
@@ -43,9 +43,9 @@ The `train` display should track:
 Required update operations:
 
 - `epoch(value)`
-- `step(value, loss=None, metrics=None, lr=None)`
-- `metrics(values)`
-- `event(message)`
+- `step(value, loss=None, metrics=None, learning_rate=None)`
+- `update_metrics(values)`
+- `log(message)`
 - `finish()`
 - `fail(error)`
 
