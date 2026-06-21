@@ -11,7 +11,7 @@ The goal is to make long-running training jobs easier to inspect from a terminal
 
 ## Status
 
-trainpit is in early development. The repository currently contains the package skeleton, tests, quality checks, and distribution build workflow.
+trainpit is in early development. The initial `train` tracker API is available, while terminal rendering is still under development.
 
 ## Requirements
 
@@ -34,10 +34,49 @@ uv sync --locked --all-extras --dev
 
 ## Usage
 
-The public API is still being designed. At this stage, the package can be imported after installation:
+Wrap a training loop with the `train` tracker:
 
 ```python
-import trainpit
+from trainpit import train
+
+with train(total_epochs=3, total_steps=5, label="demo-run") as progress:
+    for epoch in range(1, 4):
+        progress.epoch(epoch)
+
+        for step in range(1, 6):
+            loss = 1.0 / (epoch * step)
+            progress.step(
+                step,
+                loss=loss,
+                metrics={"acc": step / 5},
+                learning_rate=0.0001,
+            )
+```
+
+See the documentation tutorial for a fuller walkthrough.
+
+A runnable notebook version is available at `examples/train_tutorial.ipynb`.
+
+To run a small PyTorch neural network example:
+
+```sh
+uv run --group examples python examples/torch_nn.py
+```
+
+This opens the Textual dashboard and updates progress, metrics, and learning
+curves while the model trains. Press `q` to close the dashboard after inspecting
+the final state.
+
+For non-interactive output:
+
+```sh
+uv run --group examples python examples/torch_nn.py --plain
+```
+
+To preview the Textual dashboard demo:
+
+```sh
+uv run python examples/textual_dashboard.py
 ```
 
 ## Development

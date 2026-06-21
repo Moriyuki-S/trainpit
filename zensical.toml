@@ -14,6 +14,7 @@ edit_uri = "edit/main/docs"
 nav = [
   { "Overview" = "index.md" },
   { "Getting started" = "getting-started.md" },
+  { "Tutorial" = "tutorial.md" },
   { "Development" = "development.md" },
   { "CI" = "ci.md" },
 ]

@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "Rich CLI progress monitoring for machine learning training loops"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pydantic>=2.0",
+    "textual>=8.2.7",
+]
 
 [build-system]
 requires = ["setuptools>=82.0.1"]
@@ -16,6 +19,18 @@ dev = [
     "ruff>=0.15.15",
     "zensical>=0.0.43",
 ]
+examples = [
+    "numpy>=2.4.6",
+    "torch>=2.12.0",
+]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
 
 [tool.setuptools.packages.find]
 where = ["src"]

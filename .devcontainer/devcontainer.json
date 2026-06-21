@@ -23,7 +23,13 @@
 	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [8010],
+	"portsAttributes": {
+		"8010": {
+			"label": "Zensical docs",
+			"onAutoForward": "notify"
+		}
+	},
 
 	// Uncomment the next line to run commands after the container is created.
 	"postCreateCommand": "sudo chown -R vscode:vscode /workspaces && uv sync",
@@ -33,7 +39,7 @@
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	"remoteUser": "vscode",
-    "containerUser": "vscode",
+	"containerUser": "vscode",
 	"customizations": {
 		"vscode": {
 			"extensions": [

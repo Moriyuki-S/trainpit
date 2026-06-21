@@ -18,7 +18,7 @@ The project is in early development. The current repository focuses on the packa
 
 !!! note "Early development"
 
-    The public API is still being designed. The package can be installed and imported, but behavior-level documentation will expand as implementation lands.
+    The initial `train` tracker API is available. Terminal rendering is still under development, so behavior-level documentation currently focuses on lifecycle and update calls.
 
 ## Requirements
 
@@ -35,7 +35,8 @@ uv run pytest
 After installation, the package can be imported:
 
 ```python
-import trainpit
+from trainpit import train
 ```
 
 Continue with [Getting started](getting-started.md) for setup details.
+See [Tutorial](tutorial.md) for a minimal training loop example.
