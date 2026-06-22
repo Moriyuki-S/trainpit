@@ -90,6 +90,19 @@ def test_train_tracker_keeps_compatibility_aliases() -> None:
     assert snapshot.event == "alias event"
 
 
+def test_train_state_records_timing_timestamps() -> None:
+    state = TrainState()
+
+    state.start(now=10.0)
+    state.set_epoch(1, now=11.0)
+    state.set_step(2, loss=0.5, now=12.0)
+    state.finish(now=15.0)
+
+    assert state.started_at == 10.0
+    assert state.updated_at == 15.0
+    assert state.finished_at == 15.0
+
+
 def test_train_tracker_rejects_learning_rate_alias_conflict() -> None:
     progress = train()
 

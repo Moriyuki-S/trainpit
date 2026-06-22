@@ -148,13 +148,13 @@ def iter_training(
     except BaseException as error:
         progress.fail(error)
         if snapshot is not None:
-            snapshot.status = "failed"
+            snapshot.mark_failed()
             snapshot.event = str(error)
         raise
 
     progress.finish()
     if snapshot is not None:
-        snapshot.status = "finished"
+        snapshot.mark_finished()
         snapshot.event = "training complete"
 
 

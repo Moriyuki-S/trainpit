@@ -1,4 +1,4 @@
-name: Pytest macOS
+name: Coverage
 
 on:
   push:
@@ -15,9 +15,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pytest:
-    name: Python 3.13 on macOS
-    runs-on: macos-latest
+  coverage:
+    name: Test coverage
+    runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
@@ -33,7 +33,7 @@ jobs:
 
       - name: Set up uv
         id: setup_uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b 
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
         with:
           enable-cache: true
 
@@ -41,17 +41,24 @@ jobs:
         id: install_dependencies
         run: uv sync --locked --all-extras --dev
 
-      - name: Run pytest
-        id: run_pytest
-        run: uv run pytest
+      - name: Run coverage
+        id: run_coverage
+        run: uv run pytest --cov=trainpit --cov-report=term-missing --cov-report=xml
+
+      - name: Upload coverage report
+        id: upload_coverage_report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
 
       - name: Comment PR result
         if: ${{ always() && github.event_name == 'pull_request' }}
         continue-on-error: true
         uses: ./.github/actions/comment-pr-result
         with:
-          marker: pytest-macos
-          title: Pytest macOS
+          marker: coverage
+          title: Coverage
           outcome: ${{ job.status }}
           details: |
             Results:
@@ -59,4 +66,7 @@ jobs:
             - Python setup: `${{ steps.setup_python.outcome }}`
             - uv setup: `${{ steps.setup_uv.outcome }}`
             - Dependency install: `${{ steps.install_dependencies.outcome }}`
-            - Pytest: `${{ steps.run_pytest.outcome }}`
+            - Coverage: `${{ steps.run_coverage.outcome }}`
+            - Coverage artifact upload: `${{ steps.upload_coverage_report.outcome }}`
+            Artifact:
+            - `coverage-xml`

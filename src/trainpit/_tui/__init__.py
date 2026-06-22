@@ -1,4 +1,4 @@
-"""Public Textual TUI components for trainpit."""
+"""Internal modules backing the public trainpit.tui facade."""
 
 from __future__ import annotations
 

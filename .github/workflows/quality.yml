@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,37 +22,47 @@ jobs:
 
     steps:
       - name: Check out repository
+        id: checkout
         uses: actions/checkout@v6
 
       - name: Set up Python
+        id: setup_python
         uses: actions/setup-python@v6
         with:
           python-version-file: .python-version
 
       - name: Set up uv
+        id: setup_uv
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b 
         with:
           enable-cache: true
 
       - name: Validate lockfile
+        id: validate_lockfile
         run: uv lock --check
 
       - name: Install dependencies
+        id: install_dependencies
         run: uv sync --locked --all-extras --dev
 
       - name: Check formatting
+        id: check_formatting
         run: uv run ruff format --check .
 
       - name: Lint
+        id: lint
         run: uv run ruff check .
 
       - name: Compile Python files
+        id: compile_python_files
         run: uv run python -m compileall main.py src tests
 
       - name: Build package
+        id: build_package
         run: uv build
 
       - name: Verify wheel installs
+        id: verify_wheel_installs
         shell: bash
         run: |
           wheel_test_env="$(mktemp -d)"
@@ -64,3 +76,24 @@ jobs:
           assert trainpit.__name__ == "trainpit"
           assert metadata("trainpit")["Name"] == "trainpit"
           PY
+
+      - name: Comment PR result
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        uses: ./.github/actions/comment-pr-result
+        with:
+          marker: quality
+          title: Quality
+          outcome: ${{ job.status }}
+          details: |
+            Results:
+            - Checkout: `${{ steps.checkout.outcome }}`
+            - Python setup: `${{ steps.setup_python.outcome }}`
+            - uv setup: `${{ steps.setup_uv.outcome }}`
+            - Lockfile: `${{ steps.validate_lockfile.outcome }}`
+            - Dependency install: `${{ steps.install_dependencies.outcome }}`
+            - Format: `${{ steps.check_formatting.outcome }}`
+            - Lint: `${{ steps.lint.outcome }}`
+            - Compile: `${{ steps.compile_python_files.outcome }}`
+            - Build: `${{ steps.build_package.outcome }}`
+            - Wheel install: `${{ steps.verify_wheel_installs.outcome }}`
