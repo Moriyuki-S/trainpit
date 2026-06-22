@@ -4,10 +4,29 @@ version = "0.1.0"
 description = "Rich CLI progress monitoring for machine learning training loops"
 readme = "README.md"
 requires-python = ">=3.13"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["cli", "machine-learning", "monitoring", "training", "tui"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Monitoring",
+]
 dependencies = [
     "pydantic>=2.0",
     "textual>=8.2.7",
 ]
+
+[project.urls]
+Documentation = "https://moriyuki-s.github.io/trainpit/"
+Issues = "https://github.com/Moriyuki-S/trainpit/issues"
+Repository = "https://github.com/Moriyuki-S/trainpit"
 
 [build-system]
 requires = ["setuptools>=82.0.1"]

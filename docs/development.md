@@ -60,6 +60,30 @@ uv run ruff check .
 uv build
 ```
 
+## Publish
+
+PyPI publishing is handled by the `Publish` GitHub Actions workflow. It runs when
+the repository's `develop` branch is merged into `main` with a pull request. The
+workflow reads the version from `pyproject.toml`, creates a GitHub release tagged
+as `v<version>`, builds the source distribution and wheel with `uv build`, and
+uploads the artifacts to PyPI with Trusted Publishing.
+
+If a release for that version already exists, the workflow skips publishing so
+the same package version is not uploaded twice. Publishing a GitHub release
+manually also triggers the PyPI upload path.
+
+Before the first release, configure a PyPI Trusted Publisher with:
+
+- owner: `Moriyuki-S`
+- repository: `trainpit`
+- workflow: `publish.yml`
+- environment: `pypi`
+
+Before merging `develop` into `main`, update `project.version` in
+`pyproject.toml` to the next release version.
+
+trainpit is distributed under the MIT License.
+
 ## Documentation
 
 Build the documentation site:
