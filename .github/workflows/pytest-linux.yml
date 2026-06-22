@@ -16,9 +16,16 @@ concurrency:
 
 jobs:
   pytest:
-    name: Python 3.13 on Linux
+    name: Python ${{ matrix.python-version }} on Linux
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.11"
+          - "3.12"
+          - "3.13"
 
     steps:
       - name: Check out repository
@@ -29,7 +36,7 @@ jobs:
         id: setup_python
         uses: actions/setup-python@v6
         with:
-          python-version-file: .python-version
+          python-version: ${{ matrix.python-version }}
 
       - name: Set up uv
         id: setup_uv
@@ -50,8 +57,8 @@ jobs:
         continue-on-error: true
         uses: ./.github/actions/comment-pr-result
         with:
-          marker: pytest-linux
-          title: Pytest Linux
+          marker: pytest-linux-${{ matrix.python-version }}
+          title: Pytest Linux Python ${{ matrix.python-version }}
           outcome: ${{ job.status }}
           details: |
             Results:

@@ -3,7 +3,7 @@ name = "trainpit"
 version = "0.1.0"
 description = "Rich CLI progress monitoring for machine learning training loops"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["cli", "machine-learning", "monitoring", "training", "tui"]
@@ -13,6 +13,8 @@ classifiers = [
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -69,4 +71,4 @@ show_missing = true
 skip_covered = true
 
 [tool.ruff]
-target-version = "py313"
+target-version = "py311"

@@ -25,9 +25,9 @@ The quality workflow runs on Ubuntu and checks:
 
 pytest runs on:
 
-- Linux
-- macOS
-- Windows
+- Linux with Python 3.11, 3.12, and 3.13
+- macOS with the repository default Python version
+- Windows with the repository default Python version
 
 Each test job installs the locked development environment and runs:
 
