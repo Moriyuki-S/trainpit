@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,20 +22,41 @@ jobs:
 
     steps:
       - name: Check out repository
+        id: checkout
         uses: actions/checkout@v6
 
       - name: Set up Python
+        id: setup_python
         uses: actions/setup-python@v6
         with:
           python-version-file: .python-version
 
       - name: Set up uv
+        id: setup_uv
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b 
         with:
           enable-cache: true
 
       - name: Install dependencies
+        id: install_dependencies
         run: uv sync --locked --all-extras --dev
 
       - name: Run pytest
+        id: run_pytest
         run: uv run pytest
+
+      - name: Comment PR result
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        uses: ./.github/actions/comment-pr-result
+        with:
+          marker: pytest-macos
+          title: Pytest macOS
+          outcome: ${{ job.status }}
+          details: |
+            Results:
+            - Checkout: `${{ steps.checkout.outcome }}`
+            - Python setup: `${{ steps.setup_python.outcome }}`
+            - uv setup: `${{ steps.setup_uv.outcome }}`
+            - Dependency install: `${{ steps.install_dependencies.outcome }}`
+            - Pytest: `${{ steps.run_pytest.outcome }}`

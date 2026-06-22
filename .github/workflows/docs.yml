@@ -1,19 +1,66 @@
 name: Documentation
+
 on:
   push:
     branches:
       - master
       - main
+  pull_request:
+
 permissions:
   contents: read
-  pages: write
-  id-token: write
+
 jobs:
+  build:
+    name: Build documentation
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+
+    steps:
+      - id: checkout
+        uses: actions/checkout@v6
+
+      - id: setup_python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.x
+
+      - id: install_zensical
+        run: pip install zensical
+
+      - id: build_docs
+        run: zensical build --clean
+
+      - name: Comment PR result
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        uses: ./.github/actions/comment-pr-result
+        with:
+          marker: documentation
+          title: Documentation
+          outcome: ${{ job.status }}
+          details: |
+            Results:
+            - Checkout: `${{ steps.checkout.outcome }}`
+            - Python setup: `${{ steps.setup_python.outcome }}`
+            - zensical install: `${{ steps.install_zensical.outcome }}`
+            - Documentation build: `${{ steps.build_docs.outcome }}`
+
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
     steps:
       - uses: actions/configure-pages@v6
       - uses: actions/checkout@v6

@@ -6,6 +6,9 @@ icon: lucide/git-pull-request
 
 GitHub Actions validates code quality, packaging, and cross-platform test behavior.
 
+On pull requests, each CI workflow updates a dedicated conversation comment with
+the overall job status, run link, commit, and step-level outcomes.
+
 ## Quality
 
 The quality workflow runs on Ubuntu and checks:
@@ -43,6 +46,16 @@ uv run pytest --cov=trainpit --cov-report=term-missing --cov-report=xml
 
 The workflow uploads `coverage.xml` as a GitHub Actions artifact named
 `coverage-xml`.
+
+## Documentation
+
+Documentation builds run on pull requests with:
+
+```sh
+zensical build --clean
+```
+
+Deployments to GitHub Pages only run from `main` or `master`.
 
 ## Dependency Updates
 

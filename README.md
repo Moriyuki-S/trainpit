@@ -156,6 +156,10 @@ GitHub Actions checks the following:
 - wheel installation in a temporary environment
 - pytest on Linux, macOS, and Windows
 - coverage on Linux with `coverage.xml` uploaded as an artifact
+- documentation builds with zensical
+
+On pull requests, each CI workflow updates a dedicated conversation comment with
+the overall job status, run link, commit, and step-level outcomes.
 
 Dependabot is configured for GitHub Actions, uv, and devcontainer updates.
 
