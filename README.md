@@ -20,11 +20,29 @@ integration around the public tracker API is still evolving.
 ## Requirements
 
 - Python 3.13 or later
-- uv
+- uv for local development
 
 ## Installation
 
-Install from a local checkout:
+Install the latest published release:
+
+```sh
+pip install trainpit
+```
+
+In a uv-managed project:
+
+```sh
+uv add trainpit
+```
+
+Or install into the active virtual environment with uv:
+
+```sh
+uv pip install trainpit
+```
+
+Install from a local checkout for development:
 
 ```sh
 uv sync --locked
@@ -134,6 +152,22 @@ Build distribution artifacts:
 uv build
 ```
 
+Publish releases by merging the repository's `develop` branch into `main` with a
+pull request. The `Publish` workflow reads the version from `pyproject.toml`,
+creates a GitHub release tagged as `v<version>`, builds the source distribution
+and wheel, then uploads them to PyPI with Trusted Publishing.
+
+If a release for that version already exists, the workflow skips publishing so
+the same package version is not uploaded twice. Publishing a GitHub release
+manually also triggers the PyPI upload path.
+
+Before the first release, configure a PyPI Trusted Publisher for:
+
+- owner: `Moriyuki-S`
+- repository: `trainpit`
+- workflow: `publish.yml`
+- environment: `pypi`
+
 Before opening a pull request, run:
 
 ```sh
@@ -171,4 +205,4 @@ For code changes, please keep the scope focused and include tests when the chang
 
 ## License
 
-No license file has been added yet.
+MIT License.
