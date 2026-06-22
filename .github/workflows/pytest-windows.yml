@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Check out repository
         id: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Python
         id: setup_python
