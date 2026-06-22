@@ -36,7 +36,7 @@ Available dashboard features include:
 
 ## Requirements
 
-- Python 3.13 or later
+- Python 3.11 or later
 - uv
 
 ## Quick start

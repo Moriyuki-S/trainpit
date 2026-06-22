@@ -4,7 +4,9 @@ icon: lucide/wrench
 
 # Development
 
-trainpit uses Python 3.13, uv, pytest, ruff, pre-commit, and zensical.
+trainpit supports Python 3.11 or later and uses uv, pytest, ruff, pre-commit,
+and zensical for development. The local default Python version is recorded in
+`.python-version`.
 
 ## Setup
 

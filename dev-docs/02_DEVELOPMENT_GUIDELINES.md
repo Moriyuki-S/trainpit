@@ -14,7 +14,7 @@ decision criteria for implementing the `train` display.
 
 ## Tooling
 
-- Python 3.13
+- Python 3.11 or later
 - uv
 - pytest
 - ruff

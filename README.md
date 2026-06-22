@@ -19,7 +19,7 @@ integration around the public tracker API is still evolving.
 
 ## Requirements
 
-- Python 3.13 or later
+- Python 3.11 or later
 - uv for local development
 
 ## Installation
