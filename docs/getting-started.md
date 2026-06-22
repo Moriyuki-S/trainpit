@@ -8,7 +8,25 @@ This page covers the current installation and smoke-test flow for trainpit.
 
 ## Install
 
-Clone the repository and install the locked dependencies:
+Install the latest published release:
+
+```sh
+pip install trainpit
+```
+
+In a uv-managed project:
+
+```sh
+uv add trainpit
+```
+
+Or install into the active virtual environment with uv:
+
+```sh
+uv pip install trainpit
+```
+
+For local development, clone the repository and install the locked dependencies:
 
 ```sh
 uv sync --locked
