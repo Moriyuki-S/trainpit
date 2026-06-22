@@ -4,7 +4,7 @@ icon: lucide/wrench
 
 # Development
 
-trainpit uses Python 3.13, uv, pytest, and ruff.
+trainpit uses Python 3.13, uv, pytest, ruff, pre-commit, and zensical.
 
 ## Setup
 
@@ -12,10 +12,32 @@ trainpit uses Python 3.13, uv, pytest, and ruff.
 uv sync --locked --all-extras --dev
 ```
 
+Install the local Git hooks:
+
+```sh
+uv run pre-commit install --install-hooks
+```
+
+The configured hooks run ruff and lockfile checks before commits. The slower
+pytest and documentation build checks run before pushes.
+
+You can also run them manually:
+
+```sh
+uv run pre-commit run --all-files
+uv run pre-commit run --hook-stage pre-push --all-files
+```
+
 ## Test
 
 ```sh
 uv run pytest
+```
+
+Run tests with coverage and write `coverage.xml`:
+
+```sh
+uv run pytest --cov=trainpit --cov-report=term-missing --cov-report=xml
 ```
 
 ## Format and Lint

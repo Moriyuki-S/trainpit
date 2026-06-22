@@ -11,6 +11,29 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_custom_panels_example_imports_and_defines_panels() -> None:
+    spec = importlib.util.spec_from_file_location(
+        "custom_panels",
+        ROOT / "examples" / "custom_panels.py",
+    )
+    assert spec is not None
+    assert spec.loader is not None
+
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    app = module.CustomPanelDashboardApp()
+
+    assert [panel.id for panel in app.extra_panels] == [
+        "run-config",
+        "validation",
+        "gpu",
+    ]
+    assert app.extra_panels[0].render(app.snapshot).startswith("epochs")
+    assert app.extra_panels[1].render(app.snapshot) == "validation pending"
+    assert app.extra_panels[2].render(app.snapshot) == "gpu warming up"
+
+
 def test_torch_nn_example_runs() -> None:
     if importlib.util.find_spec("torch") is None:
         pytest.skip("torch is installed only with the examples dependency group")

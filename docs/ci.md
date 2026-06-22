@@ -32,6 +32,18 @@ Each test job installs the locked development environment and runs:
 uv run pytest
 ```
 
+## Coverage
+
+The coverage workflow runs on Ubuntu and writes both terminal output and
+`coverage.xml`:
+
+```sh
+uv run pytest --cov=trainpit --cov-report=term-missing --cov-report=xml
+```
+
+The workflow uploads `coverage.xml` as a GitHub Actions artifact named
+`coverage-xml`.
+
 ## Dependency Updates
 
 Dependabot is configured for:

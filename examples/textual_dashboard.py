@@ -49,7 +49,7 @@ class DemoTrainDashboardApp(TrainDashboardApp):
         self.snapshot.event = f"updated step {self._absolute_step}"
 
         if self._absolute_step >= TOTAL_EPOCHS * TOTAL_STEPS:
-            self.snapshot.status = "finished"
+            self.snapshot.mark_finished()
             self.snapshot.event = "training complete"
 
         self.refresh_dashboard()

@@ -14,6 +14,12 @@ To preview the Textual dashboard demo, run:
 uv run python examples/textual_dashboard.py
 ```
 
+To preview custom dashboard panels, run:
+
+```sh
+uv run python examples/custom_panels.py
+```
+
 To run the PyTorch neural network example, install the example dependency group:
 
 ```sh
@@ -29,9 +35,9 @@ uv run --group examples python examples/torch_nn.py --plain
 
 !!! note "Current implementation"
 
-    The public tracker API is available now. Terminal rendering is still under
-    development, so this tutorial focuses on integrating the lifecycle and update
-    calls that renderers will consume.
+    The public tracker API is available now. The Textual dashboard can be used
+    directly through `trainpit.tui` and by the included examples. Full renderer
+    integration around the public tracker API is still evolving.
 
 ## Basic Training Loop
 
@@ -92,6 +98,79 @@ Use `log()` for notable training events:
 ```python
 progress.log("checkpoint saved")
 ```
+
+## Timing Panel
+
+The Textual dashboard timing panel shows:
+
+- `elapsed`: total runtime since the dashboard snapshot started receiving
+  updates
+- `step/s`: completed training steps per second
+- `eta`: estimated remaining time when total steps are known
+- `last`: time since the latest dashboard update
+
+The PyTorch example updates these values while training:
+
+```sh
+uv run --group examples python examples/torch_nn.py
+```
+
+## Custom Dashboard Panels
+
+The Textual dashboard accepts user-defined panels when you need to display
+project-specific values such as GPU memory, validation status, or system stats.
+Pass `DashboardPanel` objects to `TrainDashboardApp`:
+
+```python
+from trainpit.tui import DashboardPanel, TrainDashboardApp, TrainDashboardSnapshot
+
+
+def render_gpu(snapshot: TrainDashboardSnapshot) -> str:
+    gpu_mem = snapshot.metrics.get("gpu_mem")
+    if gpu_mem is None:
+        return "gpu --"
+    return f"gpu {gpu_mem:.0f} MB"
+
+
+snapshot = TrainDashboardSnapshot(label="demo-run")
+app = TrainDashboardApp(
+    snapshot,
+    extra_panels=[
+        DashboardPanel(
+            id="gpu",
+            title="GPU",
+            slot="side",
+            render=render_gpu,
+        )
+    ],
+)
+```
+
+Panel IDs must be unique and contain only ASCII letters, numbers, underscores,
+or hyphens. Supported slots are `top`, `bottom`, and `side`.
+
+## Graph Renderers
+
+The learning curve uses `line_graph` by default. Pass another graph renderer to
+change the plot style:
+
+```python
+from trainpit.tui import TrainDashboardApp, TrainDashboardSnapshot, scatter_graph
+
+
+snapshot = TrainDashboardSnapshot(label="demo-run")
+app = TrainDashboardApp(snapshot, graph_renderer=scatter_graph)
+```
+
+Graph renderers are callables with this shape:
+
+```python
+def custom_graph(values: list[float], width: int, height: int) -> list[str]:
+    ...
+```
+
+The function should return `height` terminal text rows. Built-in renderers
+include `line_graph` and `scatter_graph`.
 
 ## Exception Handling
 
